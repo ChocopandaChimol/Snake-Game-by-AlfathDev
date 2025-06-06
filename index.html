@@ -15,16 +15,12 @@
       background-color: #1e2a38;
       border-radius: 25px;
       width: 440px;
-      box-shadow:
-        0 0 20px #22c55e88,
-        0 0 40px #22c55e55 inset;
+      box-shadow: 0 0 20px #22c55e88, 0 0 40px #22c55e55 inset;
       transition: transform 0.3s ease;
     }
     .card:hover {
       transform: scale(1.03);
-      box-shadow:
-        0 0 40px #22c55ebb,
-        0 0 60px #22c55eee inset;
+      box-shadow: 0 0 40px #22c55ebb, 0 0 60px #22c55eee inset;
     }
     h2 {
       background: linear-gradient(90deg, #22c55e, #14b8a6);
@@ -62,14 +58,16 @@
       background: linear-gradient(90deg, #b91c1c, #dc2626);
       box-shadow: 0 0 15px #dc2626;
     }
-
-    /* ----------- JOYSTICK STYLE ------------ */
-
-    /* Awalnya sembunyikan joystick */
+    button.btn-warning {
+      font-weight: 600;
+    }
+    button.btn-info {
+      font-weight: 600;
+    }
     #joystickContainer {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
+      bottom: 30px;
+      right: 30px;
       width: 150px;
       height: 150px;
       background: #1e2a38;
@@ -79,18 +77,29 @@
       display: none;
       z-index: 1000;
     }
-
     #joystick {
       width: 150px;
       height: 150px;
       border-radius: 50%;
       background: transparent !important;
     }
-
-    /* Tampilkan joystick hanya di layar kecil max-width 768px */
     @media (max-width: 768px) {
       #joystickContainer {
         display: block;
+        bottom: 30px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        width: 120px;
+        height: 120px;
+      }
+      #joystick {
+        width: 120px;
+        height: 120px;
+      }
+      .card {
+        width: 90%;
+        margin-bottom: 160px;
       }
     }
   </style>
@@ -99,41 +108,30 @@
   <div class="card p-4 text-center shadow-lg">
     <h2 class="fw-bold mb-3">🐍 Snake Game</h2>
     <p class="mb-3 fs-5" id="score">Score: 0</p>
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center mb-4">
       <canvas id="gameCanvas" width="400" height="400"></canvas>
-      <!-- HAPUS joystick dari sini -->
     </div>
-    <div class="mt-4 d-flex justify-content-center gap-3">
+    <div class="mt-4 d-flex flex-wrap justify-content-center gap-3">
       <button class="btn btn-success px-4" onclick="startGame()">Start</button>
       <button class="btn btn-warning px-4" id="pauseBtn" onclick="togglePause()" disabled>Pause</button>
       <button class="btn btn-danger px-4" onclick="resetGame()">Reset</button>
       <button class="btn btn-info px-4" id="settingsBtn" onclick="openSettings()">Settings</button>
     </div>
-
-    <!-- Settings Modal -->
-    <div id="settingsModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
-      background:#1e2a38; padding:20px; border-radius:15px; box-shadow:0 0 15px #22c55e;" >
+    <div id="settingsModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e2a38; padding:20px; border-radius:15px; box-shadow:0 0 15px #22c55e;">
       <h4 style="color:#a7f3d0; margin-bottom:15px;">Settings</h4>
-
       <label style="color:#a7f3d0;">Speed (ms): </label>
       <input type="number" id="speedInput" min="50" max="500" step="10" value="150" />
       <br/><br/>
-
       <label style="color:#a7f3d0;">Box Size (px): </label>
       <input type="number" id="boxInput" min="10" max="40" step="5" value="20" />
       <br/><br/>
-
       <button class="btn btn-success px-3" onclick="applySettings()">Apply</button>
       <button class="btn btn-danger px-3" onclick="closeSettings()">Close</button>
     </div>
-
   </div>
-
-  <!-- Joystick dipisah, fixed pojok kanan bawah -->
   <div id="joystickContainer">
     <canvas id="joystick" width="150" height="150"></canvas>
   </div>
-
   <script src="script.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
