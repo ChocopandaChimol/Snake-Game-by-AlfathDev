@@ -28,7 +28,6 @@ let gridHeight = 20;
 let tileCountX = 30;
 let tileCountY = 20; 
 
-
 function updateTileCount() {
     tileCountX = Math.floor(canvas.width / gridWidth);
     tileCountY = Math.floor(canvas.height / gridHeight);
@@ -131,11 +130,12 @@ function draw() {
     clearCanvas();
     ctx.fillStyle = '#22c55e';
     snake.forEach((segment, index) => {
-        ctx.fillRect(segment.x * gridWidth, segment.y * gridHeight, gridWidth - 2, gridHeight - 2);
         if (index === 0) {
-            ctx.fillStyle = '#14b8a6';
+            ctx.fillStyle = '#14b8a6'; // kepala ular beda warna
             ctx.fillRect(segment.x * gridWidth, segment.y * gridHeight, gridWidth - 2, gridHeight - 2);
-            ctx.fillStyle = '#22c55e';
+            ctx.fillStyle = '#22c55e'; // badan ular warna standar
+        } else {
+            ctx.fillRect(segment.x * gridWidth, segment.y * gridHeight, gridWidth - 2, gridHeight - 2);
         }
     });
     ctx.fillStyle = '#dc2626';
@@ -155,10 +155,12 @@ function update() {
 
     const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
 
+    // Cek tabrakan dinding
     if (head.x < 0 || head.x >= tileCountX || head.y < 0 || head.y >= tileCountY) {
         return gameOver();
     }
 
+    // Cek tabrakan badan sendiri
     if (snake.some(segment => segment.x === head.x && segment.y === head.y)) {
         return gameOver();
     }
@@ -227,30 +229,47 @@ function changeDirection(newDir) {
     direction = newDir;
 }
 
-
+// Keyboard control (langsung update juga)
 document.addEventListener('keydown', e => {
+    let moved = false;
     switch (e.key) {
         case 'ArrowUp': case 'w': case 'W':
             changeDirection({ x: 0, y: -1 });
+            moved = true;
             break;
         case 'ArrowDown': case 's': case 'S':
             changeDirection({ x: 0, y: 1 });
+            moved = true;
             break;
         case 'ArrowLeft': case 'a': case 'A':
             changeDirection({ x: -1, y: 0 });
+            moved = true;
             break;
         case 'ArrowRight': case 'd': case 'D':
             changeDirection({ x: 1, y: 0 });
+            moved = true;
             break;
     }
+    if (moved) update(); // langsung pindah saat tombol keyboard ditekan
 });
 
-
-btnUp.addEventListener('click', () => changeDirection({ x: 0, y: -1 }));
-btnDown.addEventListener('click', () => changeDirection({ x: 0, y: 1 }));
-btnLeft.addEventListener('click', () => changeDirection({ x: -1, y: 0 }));
-btnRight.addEventListener('click', () => changeDirection({ x: 1, y: 0 }));
-
+// Tombol klik arah (langsung update juga)
+btnUp.addEventListener('click', () => {
+    changeDirection({ x: 0, y: -1 });
+    update();
+});
+btnDown.addEventListener('click', () => {
+    changeDirection({ x: 0, y: 1 });
+    update();
+});
+btnLeft.addEventListener('click', () => {
+    changeDirection({ x: -1, y: 0 });
+    update();
+});
+btnRight.addEventListener('click', () => {
+    changeDirection({ x: 1, y: 0 });
+    update();
+});
 
 startBtn.addEventListener('click', startGame);
 pauseBtn.addEventListener('click', pauseGame);
@@ -279,39 +298,30 @@ saveSettingsBtn.addEventListener('click', () => {
         return;
     }
     if (valWidth < 10 || valWidth > canvas.width) {
-        alert(`Please enter a box width between 10 and ${canvas.width} px.`);
+        alert(`Please enter a box width between 10 and ${canvas.width}.`);
         return;
     }
     if (valHeight < 10 || valHeight > canvas.height) {
-        alert(`Please enter a box height between 10 and ${canvas.height} px.`);
-        return;
-    }
-
-    if (valWidth !== valHeight) {
-        alert('Box width and height must be the same to keep the box square.');
+        alert(`Please enter a box height between 10 and ${canvas.height}.`);
         return;
     }
 
     gameSpeed = valSpeed;
     gridWidth = valWidth;
     gridHeight = valHeight;
-
     updateTileCount();
+    settingsModal.style.display = 'none';
 
     if (isRunning) {
         clearInterval(gameInterval);
         gameInterval = setInterval(update, gameSpeed);
     }
-
-    settingsModal.style.display = 'none';
 });
 
-window.addEventListener('click', (e) => {
+window.addEventListener('click', e => {
     if (e.target === settingsModal) {
         settingsModal.style.display = 'none';
     }
 });
 
 resetGame();
-pauseBtn.disabled = true;
-resetBtn.disabled = true;
