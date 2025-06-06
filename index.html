@@ -21,6 +21,7 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
+
         .d-flex.justify-content-center.align-items-center.vh-100 {
             height: 100vh;
             display: flex;
@@ -47,6 +48,7 @@
             box-shadow: 0 0 40px #22c55ebb, 0 0 60px #22c55eee inset;
         }
 
+
         h2 {
             font-weight: 600;
             background: linear-gradient(90deg, #22c55e, #14b8a6);
@@ -55,6 +57,7 @@
             text-shadow: 0 0 8px #14b8a6cc;
             margin-bottom: 1.5rem;
         }
+
 
         #score {
             font-weight: 600;
@@ -73,6 +76,7 @@
             max-width: 100%;
             height: auto;
         }
+
 
         .btn-group {
             display: flex;
@@ -272,11 +276,6 @@
                 margin-bottom: 20px;
             }
 
-            .d-flex.justify-content-center.align-items-center.vh-100 {
-                padding-top: 3.5rem;
-                padding-bottom: 2rem;
-            }
-
             #directionButtons {
                 max-width: 160px;
                 height: 90px;
@@ -299,31 +298,34 @@
             <p id="score">Score: 0</p>
             <canvas id="gameCanvas" width="400" height="400"></canvas>
 
-            <div class="btn-group">
-                <button class="btn btn-success" id="startBtn">Start</button>
-                <button class="btn btn-danger" id="stopBtn" disabled>Stop</button>
-                <button class="btn btn-warning" id="settingsBtn">Settings</button>
+            <div id="directionButtons" aria-label="Directional controls" role="group">
+                <button id="btn-up" aria-label="Move Up" title="Up">&#9650;</button>
+                <button id="btn-left" aria-label="Move Left" title="Left">&#9664;</button>
+                <button id="btn-down" aria-label="Move Down" title="Down">&#9660;</button>
+                <button id="btn-right" aria-label="Move Right" title="Right">&#9654;</button>
             </div>
 
-            <div id="directionButtons" aria-label="Direction controls">
-                <button id="btn-up" aria-label="Up arrow">▲</button>
-                <button id="btn-left" aria-label="Left arrow">◀</button>
-                <button id="btn-down" aria-label="Down arrow">▼</button>
-                <button id="btn-right" aria-label="Right arrow">▶</button>
+            <div class="btn-group mt-3">
+                <button id="startGame" class="btn btn-success">Start</button>
+                <button id="pauseGame" class="btn btn-warning" disabled>Pause</button>
+                <button id="resetGame" class="btn btn-danger" disabled>Reset</button>
+                <button id="settingsBtn" class="btn btn-info">Settings</button>
             </div>
         </div>
     </div>
 
 
-    <div id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" tabindex="-1">
         <h4 id="settingsTitle">Game Settings</h4>
-        <label for="speedInput">Speed (ms):</label>
-        <input type="number" id="speedInput" min="50" max="1000" value="150" />
-        <label for="gridSizeInput">Grid Size (px):</label>
-        <input type="number" id="gridSizeInput" min="10" max="40" value="20" />
-        <div style="display: flex; justify-content: space-between;">
-            <button class="btn btn-info" id="saveSettingsBtn">Save</button>
-            <button class="btn btn-danger" id="cancelSettingsBtn">Cancel</button>
+        <label for="speedInput">Game Speed (ms):</label>
+        <input id="speedInput" type="number" min="50" max="1000" step="10" value="100" />
+        <label for="boxWidthInput">Box Width (px):</label>
+        <input id="boxWidthInput" type="number" min="10" max="200" step="1" value="50" />
+        <label for="boxHeightInput">Box Height (px):</label>
+        <input id="boxHeightInput" type="number" min="10" max="200" step="1" value="50" />
+        <div class="btn-group" style="justify-content: space-between; margin-top: 10px;">
+            <button id="saveSettings" class="btn btn-success">Save</button>
+            <button id="cancelSettings" class="btn btn-danger">Cancel</button>
         </div>
     </div>
 
